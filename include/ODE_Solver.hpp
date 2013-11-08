@@ -13,7 +13,7 @@ class StepEngine {
 public:
     virtual double step() = 0;
 
-protected: 
+protected:
     ODE ode; 
 };
 
@@ -25,17 +25,18 @@ protected:
 class EulerMethod : public StepEngine {
     
 public:
-    EulerMethod(double step_size_dt, ODE ode);
+    EulerMethod(double step_size_dt, ODE ode, double initial_time);
     ~EulerMethod();
     double step();
+    /// t_n gives the current time
+    double time_step_tn; 
+
     
 private:
     /// y(t_{n-1}) stores the result of the last iteration
     double last_step_y;
     /// \Delta t is the stepsize between iterations
     double step_size_dt;
-    /// t_n gives the current time
-    double time_step_tn; 
 };
 
 /** \brief Midpoint Runge-Kutta Method
