@@ -14,7 +14,7 @@ public:
     virtual double step() = 0;
 
 protected:
-    ODE ode; 
+    ODE* ode; 
 };
 
 /** \brief Euler Method 
@@ -25,7 +25,7 @@ protected:
 class EulerMethod : public StepEngine {
     
 public:
-    EulerMethod(double step_size_dt, ODE ode, double initial_time);
+    EulerMethod(double step_size_dt, ODE* ode, double initial_time);
     ~EulerMethod();
     double step();
     /// t_n gives the current time
@@ -47,7 +47,7 @@ private:
 class MRKMethod : public StepEngine {
     
 public:
-    MRKMethod(double step_size_dt, ODE ode);
+    MRKMethod(double step_size_dt, ODE* ode);
     ~MRKMethod();
     double step();
 
@@ -71,7 +71,7 @@ private:
 class FORKMethod : public StepEngine {
     
 public:
-    FORKMethod(double step_size_dt, ODE ode);
+    FORKMethod(double step_size_dt, ODE* ode);
     ~FORKMethod();
     double step();
 

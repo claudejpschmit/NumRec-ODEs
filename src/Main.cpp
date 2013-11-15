@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 {
     PolynomialODE pODE(0.0);
     double dt = 0.1;
-    EulerMethod euler(dt, pODE, 0.0);
+    EulerMethod euler(dt, &pODE, 0.0);
     
     ofstream output, exactsol;
     output.open("Euler.txt");
@@ -14,8 +14,8 @@ int main(int argc, char *argv[])
 
     for (int i = 0; i < 100; ++i) {
         
-        exactsol << pODE.exact_solution(euler.time_step_tn) << endl;
-        output << euler.step() << endl;
+        exactsol << euler.time_step_tn << " " << pODE.exact_solution(euler.time_step_tn) << endl;
+        output << euler.time_step_tn << " " << euler.step() << endl;
     }
 
     output.close();
