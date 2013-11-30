@@ -1,20 +1,40 @@
 #pragma once
 
-#include "Preamble.hpp"
-#include "helpers.hpp"
+#include "ODEs.hpp"
+#include <iostream>
 
-/** \brief
+/** \brief A scaffold class to build Ode Solver Methods
  *
+ *  ODE Solver Methods should be derived from this class.
  *
  */
 
 class StepEngine {
 
 public:
-    virtual double step() = 0;
+    /** Virtual destructor is necessary to be able 
+     *  to delete pointers to derived classes when
+     *  they go out of scope
+     */
+    virtual ~StepEngine();
+
+    /** \brief Contains the ODE solving algorithm. 
+     *      To be overloaded by derived classes.
+     */
+    virtual double step();
 
 protected:
+    /** \brief Pointer to the ODE that is to be solved 
+     *      by any of the derived methods.
+     */
     ODE* ode; 
+    /// y(t_{n-1}) stores the result of the last iteration
+    double y_n;
+    /// \Delta t is the stepsize between iterations
+    double dt;
+    /// t_n gives the current time
+    double tn; 
+
 };
 
 /** \brief Euler Method 
@@ -25,18 +45,16 @@ protected:
 class EulerMethod : public StepEngine {
     
 public:
-    EulerMethod(double step_size_dt, ODE* ode, double initial_time);
-    ~EulerMethod();
-    double step();
-    /// t_n gives the current time
-    double time_step_tn; 
+    /** \brief Constructor for an object to solve a given ODE via
+     *      the Euler Method.
+     *  \param dt step size for the method
+     *  \param ode ODE that is to be solved by the Method
+     *  \param t0 initial time
+     */
+    EulerMethod(double dt, ODE* ode, double t0);
 
-    
-private:
-    /// y(t_{n-1}) stores the result of the last iteration
-    double last_step_y;
-    /// \Delta t is the stepsize between iterations
-    double step_size_dt;
+    double step();
+
 };
 
 /** \brief Midpoint Runge-Kutta Method
@@ -47,19 +65,8 @@ private:
 class MRKMethod : public StepEngine {
     
 public:
-    MRKMethod(double step_size_dt, ODE* ode);
-    ~MRKMethod();
+    MRKMethod(double dt, ODE* ode, double t0);
     double step();
-
-private:
-    double t_midpoint; 
-    double y_midpoint;
-    /// y(t_{n-1}) stores the result of the last iteration
-    double last_step_y;
-    /// \Delta t is the stepsize between iterations
-    double step_size_dt;
-    /// t_n gives the current time
-    double time_step_tn; 
 
 };
 
@@ -71,8 +78,7 @@ private:
 class FORKMethod : public StepEngine {
     
 public:
-    FORKMethod(double step_size_dt, ODE* ode);
-    ~FORKMethod();
+    FORKMethod(double dt, ODE* ode, double t0);
     double step();
 
 };
